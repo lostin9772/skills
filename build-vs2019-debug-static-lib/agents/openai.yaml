@@ -1,0 +1,6 @@
+interface:
+  display_name: "VS2019 Debug Static Lib"
+  short_description: "按 VS2019/v142 生成 Debug 静态库包"
+  default_prompt: "Use $build-vs2019-debug-static-lib to build and package this project as a VS2019 Debug static .lib with C++17 consumer tests."
+policy:
+  allow_implicit_invocation: true
