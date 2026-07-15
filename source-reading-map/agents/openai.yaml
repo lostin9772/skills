@@ -1,0 +1,7 @@
+interface:
+  display_name: "Source Reading Map"
+  short_description: "生成源码阅读地图、详细分析文档与中文源码重注释工作流"
+  default_prompt: "Use $source-reading-map to create a source reading map, PROJECT_SOURCE_ANALYSIS.md, and detailed Chinese comments for this C++ project."
+
+policy:
+  allow_implicit_invocation: false
