@@ -1,0 +1,7 @@
+interface:
+  display_name: "Skill 决策追问"
+  short_description: "写 Skill 前澄清场景、边界、触发条件和验证标准"
+  default_prompt: "Use $grill-skill-decisions to clarify the scenario before drafting a Codex Skill."
+
+policy:
+  allow_implicit_invocation: true
