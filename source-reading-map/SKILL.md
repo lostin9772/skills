@@ -1,6 +1,6 @@
 ---
 name: source-reading-map
-description: Use only when the user explicitly invokes $source-reading-map, source-reading-map, "源码阅读地图", "源码总览文档", or asks to generate a source-reading .mhtml / PROJECT_SOURCE_ANALYSIS.md / detailed Chinese source comments for a large C/C++ project, especially Windows reverse-engineering, security, hook, runtime, or instrumentation codebases. Do not use for ordinary local code-snippet explanation unless explicitly requested.
+description: Use only when the user explicitly invokes $source-reading-map, source-reading-map, "源码阅读地图", "源码总览文档", or asks to generate a source-reading self-contained .html / optional .mhtml / PROJECT_SOURCE_ANALYSIS.md / detailed Chinese source comments for a large C/C++ project, especially Windows reverse-engineering, security, hook, runtime, or instrumentation codebases. Do not use for ordinary local code-snippet explanation unless explicitly requested.
 ---
 
 # Source Reading Map
@@ -11,13 +11,13 @@ description: Use only when the user explicitly invokes $source-reading-map, sour
 
 默认交付三类结果：
 
-1. `source-reading-map.mhtml`：放在源码项目根目录，作为单文件离线总览地图，包含阅读阶段、核心文件、调用链、模块关系和丰富图示。
+1. `source-reading-map.html`：放在源码项目根目录，作为单文件自包含离线总览地图，包含阅读阶段、核心文件、调用链、模块关系和丰富图示。
 2. `PROJECT_SOURCE_ANALYSIS.md`：放在源码项目根目录，作为长期维护的详细中文分析主文档。
 3. 源码中文注释：直接写入阅读路线中的核心源码文件，服务于后续逐文件阅读。
 
 ## 触发与边界
 
-- 只在用户显式要求使用 `$source-reading-map`、`source-reading-map`、"源码阅读地图"、"源码总览文档"、"生成源码阅读 .mhtml" 等任务时使用。
+- 只在用户显式要求使用 `$source-reading-map`、`source-reading-map`、"源码阅读地图"、"源码总览文档"、"生成源码阅读 html"、"生成源码阅读 .mhtml" 等任务时使用。
 - 不要在用户只是粘贴一段代码并询问局部含义时自动使用。
 - 默认不编译、不运行目标项目、不联网、不安装依赖。
 - 可以读取源码、README、构建文件、示例、测试和本地文档。
@@ -65,9 +65,9 @@ description: Use only when the user explicitly invokes $source-reading-map, sour
 5. examples/tests 如何反向说明真实用法。
 6. 后续逐文件重注释路线。
 
-### 3. 生成 `source-reading-map.mhtml`
+### 3. 生成 `source-reading-map.html`
 
-在源码项目根目录生成 `source-reading-map.mhtml`。它是快速进入项目的单文件离线地图，不是详细正文的替代品。
+在源码项目根目录生成 `source-reading-map.html`。它是快速进入项目的单文件自包含离线地图，不是详细正文的替代品。
 
 内容应包含：
 
@@ -84,9 +84,9 @@ description: Use only when the user explicitly invokes $source-reading-map, sour
 图示要求：
 
 - 优先包含架构图、阶段路线图、模块依赖图、初始化/安装/清理流程图、关键调用链图、核心数据结构关系图。
-- 使用 HTML/CSS、内联 SVG 或静态图示，避免依赖外部 JS/CSS/图片。
-- 如果先生成 HTML，再用 `scripts/pack_mhtml.py` 打包成 `.mhtml`。
-- 最终 `.mhtml` 必须能作为单文件复制和离线打开。
+- 使用单文件 HTML：内联 CSS、内联 SVG、内联图示和必要的内联脚本，避免依赖外部 JS/CSS/图片。
+- 不要默认生成 `.mhtml`。MHTML 对手工/脚本生成的 MIME 边界、编码和浏览器兼容性更敏感，容易出现空白页；只有用户明确要求时，才把 HTML 额外导出为 `.mhtml`。
+- 最终 `source-reading-map.html` 必须能作为单文件复制和离线打开。
 
 ### 4. 生成 `PROJECT_SOURCE_ANALYSIS.md`
 
@@ -114,11 +114,11 @@ description: Use only when the user explicitly invokes $source-reading-map, sour
 ## 未决问题和下一步
 ```
 
-详细文档要比 `.mhtml` 更展开，可以记录更多背景知识、机制解释、证据引用、推断依据和未确认点。
+详细文档要比总览 HTML 更展开，可以记录更多背景知识、机制解释、证据引用、推断依据和未确认点。
 
 ### 5. 分批添加源码中文注释
 
-大项目默认分阶段推进。第一阶段交付 `.mhtml`、`.md` 初版和核心文件清单；然后按阅读阶段逐批给核心文件添加中文注释。
+大项目默认分阶段推进。第一阶段交付 `source-reading-map.html`、`.md` 初版和核心文件清单；然后按阅读阶段逐批给核心文件添加中文注释。
 
 源码注释阶段默认连续推进，不要每批结束后等待用户再次输入"继续"。每批完成后简短汇报进度并立刻进入下一批，直到阅读路线中的核心文件注释完成、用户明确要求暂停/停止，或遇到真实阻塞。
 
@@ -173,9 +173,9 @@ description: Use only when the user explicitly invokes $source-reading-map, sour
 - examples/tests 是理解入口和用法的重要证据，要认真分析。
 - 重注释优先项目自身核心实现；examples/tests 只有在它们是最清晰入口或项目本身核心样例时才加入注释批次。
 
-## MHTML 打包脚本
+## 可选 MHTML 导出脚本
 
-使用 `scripts/pack_mhtml.py` 把已生成的 HTML 打包为 `.mhtml`：
+默认不要生成 `.mhtml`。如果用户明确要求 MHTML，再使用 `scripts/pack_mhtml.py` 把已生成且已经可独立打开的 HTML 额外打包为 `.mhtml`：
 
 ```powershell
 python scripts/pack_mhtml.py source-reading-map.html source-reading-map.mhtml
@@ -187,9 +187,10 @@ python scripts/pack_mhtml.py source-reading-map.html source-reading-map.mhtml
 
 完成后至少检查：
 
-- `source-reading-map.mhtml` 是否在项目根目录。
+- `source-reading-map.html` 是否在项目根目录。
 - `PROJECT_SOURCE_ANALYSIS.md` 是否在项目根目录。
-- `.mhtml` 是否是 `multipart/related` 单文件。
+- `source-reading-map.html` 是否为自包含单文件，不依赖外部 CSS/JS/图片。
+- 如果用户额外要求 `.mhtml`，再检查 `.mhtml` 是否是 `multipart/related` 单文件且不是空白页。
 - 已注释文件是否只增加中文阅读注释，没有修改代码逻辑。
 - 是否保留原英文注释、license、Doxygen 和 generated notice 的完整性。
 - 是否明确说明没有编译、没有运行目标项目，除非用户另行要求。
